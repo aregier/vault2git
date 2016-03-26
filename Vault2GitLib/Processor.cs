@@ -342,18 +342,21 @@ namespace Vault2Git.Lib
             try
             {
                 int ticks = 0;
-            
-                foreach (VaultLabelItemX currItem in labelItems)
+
+                if (labelItems != null)
                 {
-                    if (!_txidMappings.ContainsKey(currItem.TxID))
-                        continue;
-
-                    string gitCommitId = _txidMappings.Where(s => s.Key.Equals(currItem.TxID)).First().Value;
-
-                    if (gitCommitId != null && gitCommitId.Length > 0)
+                    foreach (VaultLabelItemX currItem in labelItems)
                     {
-                        string gitLabelName = Regex.Replace(currItem.Label, "[\\W]", "_");
-                        ticks += gitAddTag(currItem.TxID + "_" + gitLabelName, gitCommitId, currItem.Comment);
+                        if (!_txidMappings.ContainsKey(currItem.TxID))
+                            continue;
+
+                        string gitCommitId = _txidMappings.Where(s => s.Key.Equals(currItem.TxID)).First().Value;
+
+                        if (gitCommitId != null && gitCommitId.Length > 0)
+                        {
+                            string gitLabelName = Regex.Replace(currItem.Label, "[\\W]", "_");
+                            ticks += gitAddTag(currItem.TxID + "_" + gitLabelName, gitCommitId, currItem.Comment);
+                        }
                     }
                 }
                 
